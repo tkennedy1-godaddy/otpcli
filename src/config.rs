@@ -1,5 +1,4 @@
 use std::collections::HashMap;
-use std::default::Default;
 use std::io::Result as IoResult;
 use std::path::{Path, PathBuf};
 
@@ -7,7 +6,7 @@ use crate::totp::TokenAlgorithm;
 use crate::{TotpConfigError, TotpResult};
 use serde::{self, Deserialize, Serialize};
 
-#[derive(Debug, Deserialize, Serialize, Clone)]
+#[derive(Debug, Deserialize, Serialize, Clone, Default)]
 pub struct Config {
     totp: HashMap<String, TotpOptions>,
 }
@@ -69,14 +68,6 @@ impl TotpOptions {
             storage: Some(SecretLocation::KeyChain),
             secret: None,
             algorithm: Some(algorithm),
-        }
-    }
-}
-
-impl Default for Config {
-    fn default() -> Self {
-        Config {
-            totp: HashMap::new(),
         }
     }
 }

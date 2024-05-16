@@ -107,7 +107,7 @@ pub fn add_secret<P: AsRef<Path>>(
     secret: String,
     algorithm: TokenAlgorithm,
 ) -> TotpResult<Config> {
-    let totp_options = secrets::store_secret(&name, &secret, algorithm)?;
+    let totp_options = secrets::store_secret(name, &secret, algorithm)?;
     let mut config: Config = config.clone();
     config.insert(name.to_string(), totp_options);
     let string = toml::to_string(&config)?;
