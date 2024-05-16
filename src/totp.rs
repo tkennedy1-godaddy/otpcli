@@ -12,7 +12,7 @@ use serde::{Deserialize, Serialize};
 
 use super::secrets;
 
-static ALPHABET: base32::Alphabet = base32::Alphabet::RFC4648 { padding: false };
+static ALPHABET: base32::Alphabet = base32::Alphabet::Rfc4648 { padding: false };
 
 /// [RFC6238-timestep]: https://tools.ietf.org/html/rfc6238#section-5.2
 /// [RFC6238 recommended][RFC6238-timestep] time step duration of 30 seconds.
@@ -29,6 +29,7 @@ pub enum TokenAlgorithm {
 
 impl Copy for TokenAlgorithm {}
 
+#[allow(dead_code)]
 trait AsDigest {
     fn as_digest(&self) -> Box<dyn Digest>;
 }
@@ -63,13 +64,13 @@ impl AsDigest for TokenAlgorithm {
 ///
 /// ```
 pub fn standard_totp(name: &str, options: &TotpOptions) -> TotpResult<String> {
-    let secret = secrets::get_secret(name, &options)?;
+    let secret = secrets::get_secret(name, options)?;
     generate_sha1_code(secret)
 }
 
 /// Cleans a base32 secret by removing spaces and making sure it's upper-cased.
 pub fn clean_secret(secret: &str) -> String {
-    secret.replace(" ", "").to_uppercase()
+    secret.replace(' ', "").to_uppercase()
 }
 
 /// Generate a SHA1 TOTP code
@@ -91,7 +92,7 @@ pub fn generate_sha1_code(secret: String) -> TotpResult<String> {
         .duration_since(SystemTime::UNIX_EPOCH)
         .expect("Can't get time since UNIX_EPOCH?");
 
-    let clean_secret = secret.replace(" ", "").to_uppercase();
+    let clean_secret = secret.replace(' ', "").to_uppercase();
     let secret = base32::decode(ALPHABET, &clean_secret)
         .ok_or(TotpError("Failed to decode secret from base32"))?;
 

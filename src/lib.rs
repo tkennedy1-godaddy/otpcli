@@ -72,7 +72,7 @@ pub fn add_totp_secret<P: AsRef<Path>>(
     name: &str,
     secret: String,
 ) -> TotpResult<()> {
-    base32::decode(base32::Alphabet::RFC4648 { padding: false }, &secret)
+    base32::decode(base32::Alphabet::Rfc4648 { padding: false }, &secret)
         .expect("Invalid base32 OTP secret");
 
     add_secret(&config, config_dir, name, secret, TokenAlgorithm::TotpSha1).map(|_| ())
@@ -107,7 +107,7 @@ pub fn add_secret<P: AsRef<Path>>(
     secret: String,
     algorithm: TokenAlgorithm,
 ) -> TotpResult<Config> {
-    let totp_options = secrets::store_secret(&name, &secret, algorithm)?;
+    let totp_options = secrets::store_secret(name, &secret, algorithm)?;
     let mut config: Config = config.clone();
     config.insert(name.to_string(), totp_options);
     let string = toml::to_string(&config)?;
