@@ -30,7 +30,7 @@ fn main() -> Result<(), Box<dyn Error>> {
             Ok(())
         }
         Command::AddSecret { name, secret } => {
-            otp::add_totp_secret(config, config_dir, &name, secret.replace(" ", ""))?;
+            otp::add_totp_secret(config, config_dir, &name, secret.replace(' ', ""))?;
             Ok(())
         }
         #[cfg(feature = "ras_stoken")]
