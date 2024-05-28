@@ -547,7 +547,7 @@ checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
 
 [[package]]
 name = "otpcli-tkennedy1"
-version = "1.0.1-alpha.0"
+version = "1.0.1"
 dependencies = [
  "base32",
  "byteorder",
